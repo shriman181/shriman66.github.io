@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairon — Cold Chain Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cold: #1a4a6b;
+    --cold-light: #2d7aad;
+    --frost: #c8dff0;
+    --frost-pale: #eaf3fb;
+    --amber: #c97b2e;
+    --amber-light: #e8a84b;
+    --cream: #faf7f2;
+    --muted: #6b6b6b;
+    --line: rgba(15,17,23,0.12);
+    --cold-muted: rgba(26,74,107,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Karla', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(245,240,232,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 14px 48px; }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cold);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--amber); display: inline-block;
+    position: relative; top: -1px;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cold); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--paper) !important;
+    background: var(--cold);
+    padding: 10px 22px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--cold-light) !important; transform: translateY(-1px); }
+
+  /* ─── HERO ────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 88px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 64px 80px 80px;
+    position: relative; z-index: 2;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 28px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-label::before {
+    content: '';
+    display: inline-block; width: 32px; height: 1px;
+    background: var(--amber);
+  }
+
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 5vw, 72px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--cold);
+  }
+
+  .hero-p {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 420px;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 24px;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--cold);
+    padding: 16px 36px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: var(--cold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(26,74,107,0.22);
+  }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cold);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--cold);
+    padding-bottom: 2px;
+    transition: gap 0.2s, opacity 0.2s;
+  }
+  .btn-ghost:hover { gap: 14px; opacity: 0.7; }
+
+  .hero-right {
+    position: relative;
+    background: var(--cold);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* cold chain data visual */
+  .hero-visual {
+    width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0;
+  }
+
+  .hero-stat-card {
+    position: absolute;
+    background: rgba(245,240,232,0.96);
+    border: 1px solid rgba(245,240,232,0.2);
+    border-radius: 4px;
+    padding: 18px 22px;
+    backdrop-filter: blur(8px);
+  }
+  .hero-stat-card.card-1 { bottom: 120px; left: 40px; animation: floatA 4s ease-in-out infinite; }
+  .hero-stat-card.card-2 { top: 160px; right: 40px; animation: floatB 4s ease-in-out infinite 2s; }
+  .hero-stat-card.card-3 { top: 50%; left: 50%; transform: translate(-50%,-50%); animation: floatC 5s ease-in-out infinite 1s; }
+
+  @keyframes floatA {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes floatB {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+  @keyframes floatC {
+    0%,100% { transform: translate(-50%,-50%) translateY(0); }
+    50% { transform: translate(-50%,-50%) translateY(-6px); }
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cold);
+    line-height: 1;
+  }
+  .stat-value.amber { color: var(--amber); }
+  .stat-value.red { color: #c0392b; }
+  .stat-unit {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* temp graph lines inside hero */
+  .hero-bg-pattern {
+    position: absolute; inset: 0;
+    opacity: 0.15;
+  }
+
+  /* ─── SCROLL REVEAL ───────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── SECTION BASE ────────────────────────── */
+  section { padding: 120px 80px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before {
+    content: ''; display: inline-block; width: 24px; height: 1px; background: var(--amber);
+  }
+  .section-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 3.5vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .section-h2 em { font-style: italic; color: var(--cold); }
+
+  /* ─── PROBLEM ─────────────────────────────── */
+  #problem {
+    background: var(--cold);
+    color: var(--paper);
+    padding: 120px 80px;
+  }
+  #problem .section-label { color: var(--amber-light); }
+  #problem .section-label::before { background: var(--amber-light); }
+  #problem .section-h2 { color: var(--paper); }
+  #problem .section-h2 em { color: var(--frost); }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-top: 72px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .problem-cell {
+    background: rgba(26,74,107,0.4);
+    padding: 48px 40px;
+    border: 1px solid rgba(200,223,240,0.12);
+    transition: background 0.3s;
+  }
+  .problem-cell:hover { background: rgba(45,122,173,0.25); }
+
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--frost);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .problem-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .problem-text {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(200,223,240,0.75);
+  }
+  .problem-stat {
+    margin-top: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--amber-light);
+    letter-spacing: 0.05em;
+    padding-top: 20px;
+    border-top: 1px solid rgba(200,223,240,0.12);
+  }
+
+  /* ─── PRODUCT ─────────────────────────────── */
+  #product { background: var(--cream); }
+
+  .product-intro {
+    max-width: 600px;
+    margin-bottom: 80px;
+  }
+  .product-intro p {
+    font-size: 17px; font-weight: 300; line-height: 1.8; color: var(--muted);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+
+  .product-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 48px 44px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .product-card:hover {
+    box-shadow: 0 16px 48px rgba(26,74,107,0.1);
+    transform: translateY(-3px);
+  }
+  .product-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--cold);
+  }
+  .product-card.amber-top::before { background: var(--amber); }
+
+  .product-card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .product-card-icon {
+    width: 48px; height: 48px;
+    background: var(--cold-muted);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 22px;
+  }
+  .product-card.amber-top .product-card-icon { background: rgba(201,123,46,0.08); }
+
+  .product-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .product-card-text {
+    font-size: 15px; font-weight: 300; line-height: 1.75; color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .product-card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cold);
+    background: var(--frost-pale);
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .product-card.amber-top .product-card-tag { color: var(--amber); background: rgba(201,123,46,0.08); }
+
+  /* wide card */
+  .product-card.wide {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .product-card.wide .product-card-visual {
+    background: var(--cold);
+    border-radius: 3px;
+    height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+
+  /* ─── MARKET ──────────────────────────────── */
+  #market {
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .market-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .market-stats {
+    display: flex; flex-direction: column; gap: 32px;
+  }
+
+  .market-stat-row {
+    display: flex; align-items: flex-end; gap: 20px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .market-stat-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .market-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--cold);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .market-desc {
+    font-size: 15px; font-weight: 300; line-height: 1.65; color: var(--muted);
+  }
+  .market-desc strong {
+    display: block;
+    font-family: 'Karla', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .market-right p {
+    font-size: 17px; font-weight: 300; line-height: 1.85; color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .market-right p:last-child { margin-bottom: 0; }
+  .market-right strong { color: var(--ink); font-weight: 500; }
+
+  /* ─── FOUNDER ─────────────────────────────── */
+  #founder {
+    background: white;
+    border-top: 1px solid var(--line);
+  }
+
+  .founder-inner {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .founder-portrait {
+    position: relative;
+  }
+  .founder-portrait-frame {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: var(--cold);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .founder-portrait-pattern {
+    position: absolute; inset: 0;
+    opacity: 0.15;
+  }
+  .founder-portrait-initials {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 96px;
+    font-weight: 700;
+    font-style: italic;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: -4px;
+  }
+  .founder-portrait-label {
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    background: var(--amber);
+    padding: 14px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .founder-name-plate {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+  }
+  .founder-role-plate {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .founder-content { padding-top: 8px; }
+
+  .founder-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--cold);
+    margin-bottom: 40px;
+    padding-left: 24px;
+    border-left: 3px solid var(--cold);
+  }
+
+  .founder-bio p {
+    font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .founder-bio p:last-child { margin-bottom: 0; }
+  .founder-bio strong { color: var(--ink); font-weight: 500; }
+
+  .founder-links {
+    margin-top: 40px;
+    display: flex; gap: 20px;
+  }
+  .founder-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cold);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--cold);
+    transition: opacity 0.2s;
+  }
+  .founder-link:hover { opacity: 0.6; }
+
+  /* ─── HOW IT WORKS ────────────────────────── */
+  #how {
+    background: var(--cream);
+    border-top: 1px solid var(--line);
+  }
+
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 72px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .how-step {
+    padding: 44px 36px;
+    border-right: 1px solid var(--line);
+    position: relative;
+    transition: background 0.3s;
+  }
+  .how-step:last-child { border-right: none; }
+  .how-step:hover { background: white; }
+
+  .how-step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+  .how-step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .how-step-text {
+    font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--muted);
+  }
+  .how-arrow {
+    position: absolute;
+    top: 44px; right: -16px;
+    width: 32px; height: 32px;
+    background: var(--cold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+    color: white; font-size: 14px;
+  }
+  .how-step:last-child .how-arrow { display: none; }
+
+  /* ─── CTA ─────────────────────────────────── */
+  #cta {
+    background: var(--cold);
+    text-align: center;
+    padding: 120px 80px;
+  }
+  #cta .section-label { justify-content: center; }
+  #cta .section-label::before { display: none; }
+  .cta-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 4vw, 60px);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--paper);
+    margin-bottom: 24px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .cta-p {
+    font-size: 17px; font-weight: 300; line-height: 1.75;
+    color: rgba(200,223,240,0.75);
+    max-width: 480px; margin: 0 auto 48px;
+  }
+  .btn-cta-white {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--cold);
+    background: var(--paper);
+    padding: 18px 48px;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-cta-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  }
+
+  /* ─── FOOTER ──────────────────────────────── */
+  footer {
+    background: var(--ink);
+    padding: 60px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--paper);
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 0.06em;
+  }
+  .footer-links {
+    display: flex; gap: 28px; list-style: none;
+  }
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--frost); }
+
+  /* ─── SVG temp chart ──────────────────────── */
+  .temp-chart { width: 100%; height: 100%; }
+
+  /* ─── DIVIDER ─────────────────────────────── */
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 48px 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--line); }
+  .divider-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── TICKER ──────────────────────────────── */
+  .ticker-wrap {
+    overflow: hidden;
+    background: var(--amber);
+    padding: 12px 0;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .ticker {
+    display: flex; gap: 64px;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .ticker-item::before { content: '·'; opacity: 0.6; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── RESPONSIVE ──────────────────────────── */
+  @media (max-width: 1100px) {
+    #hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-right { height: 400px; display: none; }
+    .hero-left { padding: 60px 48px; }
+    .product-card.wide { grid-column: span 1; grid-template-columns: 1fr; }
+    .product-card.wide .product-card-visual { display: none; }
+    .how-steps { grid-template-columns: repeat(2, 1fr); }
+    .how-step { border-bottom: 1px solid var(--line); }
+    .how-arrow { display: none; }
+    .founder-inner { grid-template-columns: 1fr; max-width: 600px; }
+    .market-inner { grid-template-columns: 1fr; }
+    section { padding: 80px 48px; }
+    #problem { padding: 80px 48px; }
+    nav { padding: 16px 32px; }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 48px 32px; }
+    .problem-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    section { padding: 60px 24px; }
+    #problem, #cta { padding: 60px 24px; }
+    nav { padding: 16px 24px; }
+    footer { padding: 40px 24px; }
+    .hero-left { padding: 40px 24px; }
+    .how-steps { grid-template-columns: 1fr; }
+    .market-num { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Kairon
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#product">Platform</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#founder">Founder</a></li>
+    <li><a href="mailto:dhruv@kairon.ai" class="nav-cta">Get Early Access</a></li>
+  </ul>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap" style="margin-top: 64px;">
+  <div class="ticker">
+    <span class="ticker-item">Cold chain market: $436B in 2025</span>
+    <span class="ticker-item">Up to 50% of vaccines wasted from temperature excursions</span>
+    <span class="ticker-item">FDA 21 CFR Part 211 · EU GDP compliance</span>
+    <span class="ticker-item">Biologics: 40% of new pharma approvals</span>
+    <span class="ticker-item">Cold chain CAGR: 16% through 2032</span>
+    <span class="ticker-item">Temperature deviation = product loss + regulatory liability</span>
+    <span class="ticker-item">Cold chain market: $436B in 2025</span>
+    <span class="ticker-item">Up to 50% of vaccines wasted from temperature excursions</span>
+    <span class="ticker-item">FDA 21 CFR Part 211 · EU GDP compliance</span>
+    <span class="ticker-item">Biologics: 40% of new pharma approvals</span>
+    <span class="ticker-item">Cold chain CAGR: 16% through 2032</span>
+    <span class="ticker-item">Temperature deviation = product loss + regulatory liability</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero" style="padding: 0;">
+  <div class="hero-left">
+    <div class="hero-label">Cold Chain Intelligence</div>
+    <h1 class="hero-h1">
+      Know before<br>the chain<br><em>breaks.</em>
+    </h1>
+    <p class="hero-p">
+      Kairon reads your sensor data to predict temperature excursions before they reach spoilage thresholds — then handles the insurance claim and compliance paperwork automatically.
+    </p>
+    <div class="hero-actions">
+      <a href="mailto:dhruv@kairon.ai" class="btn-primary">Request Demo</a>
+      <a href="#product" class="btn-ghost">See the Platform →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <!-- temp chart SVG -->
+    <svg class="hero-bg-pattern" viewBox="0 0 600 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <!-- grid lines -->
+      <line x1="0" y1="140" x2="600" y2="140" stroke="white" stroke-width="0.5"/>
+      <line x1="0" y1="280" x2="600" y2="280" stroke="white" stroke-width="0.5"/>
+      <line x1="0" y1="420" x2="600" y2="420" stroke="white" stroke-width="0.5"/>
+      <line x1="0" y1="560" x2="600" y2="560" stroke="white" stroke-width="0.5"/>
+      <line x1="150" y1="0" x2="150" y2="700" stroke="white" stroke-width="0.5"/>
+      <line x1="300" y1="0" x2="300" y2="700" stroke="white" stroke-width="0.5"/>
+      <line x1="450" y1="0" x2="450" y2="700" stroke="white" stroke-width="0.5"/>
+    </svg>
+
+    <!-- temp line chart -->
+    <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 600 700" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- safe zone band -->
+      <rect x="0" y="220" width="600" height="180" fill="rgba(200,223,240,0.08)" rx="0"/>
+      <!-- upper limit line -->
+      <line x1="0" y1="220" x2="600" y2="220" stroke="#c8dff0" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.5"/>
+      <text x="12" y="215" font-family="'DM Mono', monospace" font-size="10" fill="#c8dff0" opacity="0.6">8°C safe max</text>
+      <!-- lower limit line -->
+      <line x1="0" y1="400" x2="600" y2="400" stroke="#c8dff0" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.5"/>
+      <text x="12" y="415" font-family="'DM Mono', monospace" font-size="10" fill="#c8dff0" opacity="0.6">2°C safe min</text>
+
+      <!-- temp line - goes stable then excursion then drop -->
+      <polyline
+        points="0,310 60,305 120,308 180,300 240,295 300,280 350,240 370,190 390,180 420,185 440,200 470,230 500,270 540,300 600,305"
+        fill="none"
+        stroke="#e8a84b"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.85"
+      />
+      <!-- excursion area fill -->
+      <polygon
+        points="300,280 350,240 370,190 390,180 420,185 440,200 470,230 500,270 540,300 540,220 300,220"
+        fill="rgba(232,168,75,0.12)"
+      />
+      <!-- excursion dot -->
+      <circle cx="390" cy="180" r="7" fill="#e8a84b" opacity="0.9"/>
+      <circle cx="390" cy="180" r="14" fill="#e8a84b" opacity="0.2"/>
+
+      <!-- Kairon prediction line (dashed blue) -->
+      <polyline
+        points="300,280 320,270 345,250 360,230 375,215"
+        fill="none"
+        stroke="#c8dff0"
+        stroke-width="2"
+        stroke-dasharray="6,4"
+        opacity="0.7"
+      />
+      <text x="380" y="212" font-family="'DM Mono', monospace" font-size="9" fill="#c8dff0" opacity="0.8">kairon alert</text>
+    </svg>
+
+    <!-- floating stat cards -->
+    <div class="hero-stat-card card-1">
+      <div class="stat-label">Excursion Risk</div>
+      <div class="stat-value red">High</div>
+      <div class="stat-unit">Predicted: 47 min</div>
+    </div>
+    <div class="hero-stat-card card-2">
+      <div class="stat-label">Shipment Value</div>
+      <div class="stat-value amber">$284K</div>
+      <div class="stat-unit">Biologics · FedEx Custom Critical</div>
+    </div>
+    <div class="hero-stat-card card-3">
+      <div class="stat-label">Claim Status</div>
+      <div class="stat-value" style="font-size:18px;color:#1a9e6e">Auto-filed ✓</div>
+      <div class="stat-unit">FDA report generated</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="reveal">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-h2">Cold chain breaks are<br><em>expensive, invisible, and slow.</em></h2>
+  </div>
+
+  <div class="problem-grid reveal">
+    <div class="problem-cell">
+      <div class="problem-num">01</div>
+      <div class="problem-title">Excursions are discovered too late</div>
+      <div class="problem-text">Temperature deviations in pharmaceutical and food shipments are typically found at destination — after the product is already compromised. Current systems log data; they don't predict it.</div>
+      <div class="problem-stat">→ Damage is irreversible. Loss is certain.</div>
+    </div>
+    <div class="problem-cell">
+      <div class="problem-num">02</div>
+      <div class="problem-title">Insurance claims are manual nightmares</div>
+      <div class="problem-text">Filing a cold chain claim means cross-referencing sensor logs, shipment records, and policy language — manually, under time pressure, after a loss. Companies leave millions unclaimed every year due to documentation burden.</div>
+      <div class="problem-stat">→ Months of back-and-forth. Partial recoveries.</div>
+    </div>
+    <div class="problem-cell">
+      <div class="problem-num">03</div>
+      <div class="problem-title">Compliance is a full-time job</div>
+      <div class="problem-text">FDA 21 CFR Part 211, EU GDP, FSMA, USP &lt;1079&gt; — each shipment requires documented temperature evidence. Teams spend hundreds of hours compiling regulatory dossiers that should be generated automatically.</div>
+      <div class="problem-stat">→ Regulatory risk compounds product risk.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section id="product">
+  <div class="reveal">
+    <div class="section-label">The Platform</div>
+    <h2 class="section-h2">Four capabilities.<br><em>One intelligence layer.</em></h2>
+  </div>
+  <div class="product-intro reveal">
+    <p>Kairon sits between your IoT sensors and your operations team — ingesting real-time temperature, humidity, and location data to give you foresight, not just record-keeping.</p>
+  </div>
+
+  <div class="product-grid">
+    <div class="product-card reveal">
+      <div class="product-card-num">01 / Predict</div>
+      <div class="product-card-icon">🌡️</div>
+      <h3 class="product-card-title">Excursion Prediction Engine</h3>
+      <p class="product-card-text">ML models trained on historical shipment patterns, ambient conditions, carrier routes, and equipment profiles. Kairon flags excursion risk hours before thresholds are breached — giving teams time to reroute, intervene, or pre-stage replacements.</p>
+      <span class="product-card-tag">Real-time · Predictive · IoT-native</span>
+    </div>
+
+    <div class="product-card amber-top reveal">
+      <div class="product-card-num">02 / Recover</div>
+      <div class="product-card-icon">📋</div>
+      <h3 class="product-card-title">Automated Insurance Claims</h3>
+      <p class="product-card-text">When an excursion occurs, Kairon auto-generates a fully documented insurance claim — sensor logs, time-stamped evidence, product valuation, and policy-aligned language — filed within minutes, not weeks.</p>
+      <span class="product-card-tag">Automated · Sensor-linked · Policy-aware</span>
+    </div>
+
+    <div class="product-card reveal">
+      <div class="product-card-num">03 / Comply</div>
+      <div class="product-card-icon">⚖️</div>
+      <h3 class="product-card-title">Regulatory Documentation</h3>
+      <p class="product-card-text">Auto-generated compliance reports aligned to FDA 21 CFR, EU GDP, FSMA, and WHO cold chain guidelines. Every shipment produces an audit-ready dossier without manual data assembly.</p>
+      <span class="product-card-tag">FDA · EU GDP · WHO · FSMA</span>
+    </div>
+
+    <div class="product-card amber-top reveal">
+      <div class="product-card-num">04 / Optimize</div>
+      <div class="product-card-icon">📊</div>
+      <h3 class="product-card-title">Carrier Performance Scoring</h3>
+      <p class="product-card-text">Track temperature integrity, on-time performance, and excursion history across every carrier you use. Make procurement decisions based on cold chain reliability data — not just rates and transit times.</p>
+      <span class="product-card-tag">Score · Rank · Negotiate</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="reveal">
+    <div class="section-label">Workflow</div>
+    <h2 class="section-h2">From sensor to <em>resolution,</em><br>automatically.</h2>
+  </div>
+
+  <div class="how-steps reveal">
+    <div class="how-step">
+      <div class="how-step-num">Step 01</div>
+      <h3 class="how-step-title">Connect your sensors</h3>
+      <p class="how-step-text">Kairon integrates with existing IoT data loggers, reefer telemetry, and warehouse monitoring systems via API or direct connector. No rip-and-replace required.</p>
+      <div class="how-arrow">→</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">Step 02</div>
+      <h3 class="how-step-title">Kairon models your baseline</h3>
+      <p class="how-step-text">Within days, the prediction engine builds a behavioral model for your lanes, products, and carriers — learning what "normal" looks like so it can recognize what "dangerous" feels like.</p>
+      <div class="how-arrow">→</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">Step 03</div>
+      <h3 class="how-step-title">Alerts fire before spoilage</h3>
+      <p class="how-step-text">Operational alerts are pushed to your team — with recommended interventions, rerouting options, and pre-drafted communications — giving you the window to act.</p>
+      <div class="how-arrow">→</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">Step 04</div>
+      <h3 class="how-step-title">Documentation handles itself</h3>
+      <p class="how-step-text">Insurance claims and regulatory reports are generated automatically from the event record. One click review, one click submit. Your compliance team closes the loop in minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="market-inner">
+    <div class="market-stats reveal">
+      <div class="section-label">Market</div>
+      <h2 class="section-h2">A $436B<br>infrastructure<br><em>problem.</em></h2>
+
+      <div style="margin-top: 48px;">
+        <div class="market-stat-row">
+          <div class="market-num">$436B</div>
+          <div class="market-desc">
+            <strong>Global cold chain market (2025)</strong>
+            Growing at 16% CAGR through 2032, driven by biologics, vaccines, and perishable food demand.
+          </div>
+        </div>
+        <div class="market-stat-row">
+          <div class="market-num">50%</div>
+          <div class="market-desc">
+            <strong>Vaccines wasted globally</strong>
+            Due to cold chain failures during transit and storage — a public health crisis rooted in operational blindness.
+          </div>
+        </div>
+        <div class="market-stat-row">
+          <div class="market-num">40%</div>
+          <div class="market-desc">
+            <strong>New pharma approvals are biologics</strong>
+            Temperature-sensitive by nature. Each shipment carries regulatory, financial, and patient safety risk.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="market-right reveal">
+      <p>Kairon targets the <strong>pharmaceutical and premium food sectors</strong> — the highest-value, highest-risk segments of cold chain logistics where excursions carry the steepest regulatory and financial consequences.</p>
+      <p>Today, companies manage temperature risk with manual processes, reactive systems, and overworked QA teams. <strong>The compliance and insurance burden is significant and growing</strong> as regulation tightens globally.</p>
+      <p>We are building the intelligence layer that sits on top of existing cold chain infrastructure — making existing assets smarter without requiring new hardware investment. Our go-to-market targets <strong>3PLs, pharma manufacturers, and specialty food distributors</strong> in North America and the EU.</p>
+      <p>The first product is a SaaS subscription priced per-shipment-lane, with usage-based recovery fees on insurance claims filed through the platform.</p>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">Comparable</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <p style="font-size:14px;font-style:italic;color:var(--muted);">The cold chain software market is fragmented between legacy ERP add-ons and point IoT tools. No incumbent combines predictive excursion intelligence, automated claims, and regulatory documentation in one platform. <strong>Kairon is building that layer.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="reveal">
+    <div class="section-label">The Founder</div>
+    <h2 class="section-h2">Built by someone who<br><em>has felt the problem.</em></h2>
+  </div>
+
+  <div class="founder-inner" style="margin-top: 64px;">
+    <div class="founder-portrait reveal">
+      <div class="founder-portrait-frame">
+        <svg class="founder-portrait-pattern" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- subtle pattern -->
+          <line x1="0" y1="50" x2="400" y2="50" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="100" x2="400" y2="100" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="150" x2="400" y2="150" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="200" x2="400" y2="200" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="250" x2="400" y2="250" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="300" x2="400" y2="300" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="350" x2="400" y2="350" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="400" x2="400" y2="400" stroke="white" stroke-width="0.8"/>
+          <line x1="0" y1="450" x2="400" y2="450" stroke="white" stroke-width="0.8"/>
+          <line x1="50" y1="0" x2="50" y2="500" stroke="white" stroke-width="0.8"/>
+          <line x1="100" y1="0" x2="100" y2="500" stroke="white" stroke-width="0.8"/>
+          <line x1="150" y1="0" x2="150" y2="500" stroke="white" stroke-width="0.8"/>
+          <line x1="200" y1="0" x2="200" y2="500" stroke="white" stroke-width="0.8"/>
+          <line x1="250" y1="0" x2="250" y2="500" stroke="white" stroke-width="0.8"/>
+          <line x1="300" y1="0" x2="300" y2="500" stroke="white" stroke-width="0.8"/>
+          <line x1="350" y1="0" x2="350" y2="500" stroke="white" stroke-width="0.8"/>
+          <!-- temp wave -->
+          <path d="M 0 300 Q 50 250 100 260 Q 150 270 200 240 Q 250 210 300 180 Q 350 150 400 200" fill="none" stroke="white" stroke-width="2" opacity="0.5"/>
+        </svg>
+        <div class="founder-portrait-initials">DD</div>
+        <div class="founder-portrait-label">
+          <span class="founder-name-plate">Dhruv Davda</span>
+          <span class="founder-role-plate">Founder & CEO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="founder-content reveal">
+      <blockquote class="founder-quote">
+        "The cold chain doesn't fail loudly. It fails quietly, one degree at a time — and nobody finds out until the product is gone and the regulator is asking questions."
+      </blockquote>
+
+      <div class="founder-bio">
+        <p>Dhruv Davda founded Kairon after observing the operational gap that pharmaceutical and specialty food companies live with daily: <strong>sensor data that records, but doesn't think.</strong> The thesis is simple — cold chain intelligence should be predictive by default, and the compliance burden that follows a failure should be automated away entirely.</p>
+
+        <p>His background spans logistics technology, supply chain operations, and regulatory affairs — with a particular focus on the interface between physical infrastructure and the software layer that manages it. He has worked with cold chain operators across the pharmaceutical and specialty food verticals, and seen firsthand the compounding cost of late-stage excursion discovery: product loss, insurance disputes, regulatory letters, and carrier renegotiations — all triggered by a problem that was visible in the data long before it became a crisis.</p>
+
+        <p>Kairon is his answer to that. <strong>Intelligence at the threshold, not after it.</strong></p>
+      </div>
+
+      <div class="founder-links">
+        <a href="mailto:dhruv@kairon.ai" class="founder-link">✉ dhruv@kairon.ai</a>
+        <a href="https://linkedin.com" target="_blank" class="founder-link">LinkedIn →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="reveal">
+    <div class="section-label">Early Access</div>
+    <div class="cta-h2">Ready to see what your<br>sensor data already knows?</div>
+    <p class="cta-p">We're working with a select group of pharmaceutical and specialty food shippers for our early access program. Bring your data. We'll show you what's hiding in it.</p>
+    <a href="mailto:dhruv@kairon.ai" class="btn-cta-white">Talk to Dhruv →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">
+    <span style="width:7px;height:7px;background:var(--amber);border-radius:50%;display:inline-block;"></span>
+    Kairon
+  </a>
+  <span class="footer-copy">© 2025 Kairon · Cold Chain Intelligence</span>
+  <ul class="footer-links">
+    <li><a href="#product">Platform</a></li>
+    <li><a href="#founder">About</a></li>
+    <li><a href="mailto:dhruv@kairon.ai">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+  // scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+
+  // nav scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+</script>
+</body>
+</html>
